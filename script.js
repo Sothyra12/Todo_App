@@ -19,13 +19,22 @@ const taskData = [];
 let currentTask = {};
 
 // open and close the form modal using classList.toggle instead of classlist.add/.remove
-openTaskFormBtn.addEventListener("click", () => taskForm.classList.toggle("hidden"));
+openTaskFormBtn.addEventListener("click", () =>
+  taskForm.classList.toggle("hidden")
+);
 
-closeTaskFormBtn.addEventListener("click", () => {confirmCloseDialog.showModal();});
+closeTaskFormBtn.addEventListener("click", () => {
+  confirmCloseDialog.showModal();
+});
 
 cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
 
 discardBtn.addEventListener("click", () => {
   confirmCloseDialog.close();
   taskForm.classList.toggle("hidden");
+});
+
+// save the input values to taskData array and render the task on the page
+taskForm.addEventListener("submit", (e) => {
+  e.preventDefault(); // prevent the browser from refreshing the page after form submission
 });
