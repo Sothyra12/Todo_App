@@ -37,4 +37,5 @@ discardBtn.addEventListener("click", () => {
 // save the input values to taskData array and render the task on the page
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault(); // prevent the browser from refreshing the page after form submission
+  const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
 });
