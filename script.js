@@ -38,4 +38,6 @@ discardBtn.addEventListener("click", () => {
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault(); // prevent the browser from refreshing the page after form submission
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
+  const taskObj = {};
+  console.log(taskObj);
 });
