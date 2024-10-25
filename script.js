@@ -18,6 +18,44 @@ const taskData = [];
 // track the state when editing & discarding tasks
 let currentTask = {};
 
+// add the input values to the taskData array
+const addOrUpdateTask = () => {
+  const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
+  const taskObj = {
+    id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
+    title: titleInput.value,
+    date: dateInput.value,
+    description: descriptionInput.value,
+  };
+
+  if (dataArrIndex === -1) {
+    taskData.unshift(taskObj);
+  }
+
+  updateTaskContainer();
+  reset();
+};
+
+// add the tasks to the DOM
+const updateTaskContainer = () => {
+  tasksContainer.innerHTML = "";
+
+  taskData.forEach(
+    ({ id, title, date, description }) => {
+        tasksContainer.innerHTML += `
+        <div class="task" id="${id}">
+          <p><strong>Title:</strong> ${title}</p>
+          <p><strong>Date:</strong> ${date}</p>
+          <p><strong>Description:</strong> ${description}</p>
+          <button onclick="editTask(this)" type="button" class="btn">Edit</button>
+          <button onclick="deleteTask(this)" type="button" class="btn">Delete</button>
+        </div>
+      `
+    }
+  );
+};
+
+
 // reset the form inputs after adding a task
 const reset = () => {
   titleInput.value = "";
@@ -43,36 +81,8 @@ discardBtn.addEventListener("click", () => {
   reset();
 });
 
-// save the input values to taskData array and render the task on the page
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault(); // prevent the browser from refreshing the page after form submission
-  const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
-  const taskObj = {
-    id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
-    title: titleInput.value,
-    date: dateInput.value,
-    description: descriptionInput.value,
-  };
 
-  // if the task is being edited, update the taskData array with the new task object
-  if (dataArrIndex === -1) {
-    taskData.unshift(taskObj);
-  }
-
-  // loop through the taskData array and render each task on the page
-  taskData.forEach(({id, title, date, description}) => {
-      tasksContainer.innerHTML += `
-        <div class="task" id="${id}">
-          <p><strong>Title:</strong> ${title}</p>
-          <p><strong>Date:</strong> ${date}</p>
-          <p><strong>Description:</strong> ${description}</p>
-          <button type="button" class="btn">Edit</button>
-          <button type="button" class="btn">Delete</button>
-        </div>
-      `
-    }
-  );
-
-  // reset the form inputs after adding a task
-  reset();
+  addOrUpdateTask();
 });
