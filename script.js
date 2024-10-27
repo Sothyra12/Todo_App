@@ -30,6 +30,8 @@ const addOrUpdateTask = () => {
 
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
+  } else {
+    taskData[dateArrIndex] = taskObj;
   }
 
   updateTaskContainer();
@@ -40,6 +42,7 @@ const addOrUpdateTask = () => {
 const updateTaskContainer = () => {
   tasksContainer.innerHTML = "";
 
+  // loop through the taskData array and add the tasks to the DOM
   taskData.forEach(
     ({ id, title, date, description }) => {
         tasksContainer.innerHTML += `
@@ -67,7 +70,18 @@ const deleteTask = (buttonEl) => {
 }
 
 const editTask = (buttonEl) => {
+  // find the index of the task to edit
+  const dataArrIndex = taskData.findIndex((item) => item.id === buttonEl.parentElement.id);
 
+  currentTask = taskData[dataArrIndex];
+
+  titleInput.value = currentTask.title;
+  dateInput.value = currentTask.date;
+  descriptionInput.value = currentTask.description;
+
+  addOrUpdateTaskBtn.innerText = "Update Task";
+
+  taskForm.classList.toggle("hidden");
 }
 
 // reset the form inputs after adding a task
@@ -85,7 +99,14 @@ openTaskFormBtn.addEventListener("click", () =>
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
-  confirmCloseDialog.showModal();
+  const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
+  const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || descriptionInput.value !== currentTask.description;
+
+  if (formInputsContainValues && formInputValuesUpdated) {
+    confirmCloseDialog.showModal();
+  } else {
+    reset();
+  }
 });
 
 cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
@@ -97,6 +118,5 @@ discardBtn.addEventListener("click", () => {
 
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault(); // prevent the browser from refreshing the page after form submission
-
   addOrUpdateTask();
 });
