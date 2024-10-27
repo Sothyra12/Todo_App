@@ -55,6 +55,20 @@ const updateTaskContainer = () => {
   );
 };
 
+const deleteTask = (buttonEl) => {
+  // find the index of the task to delete
+  const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
+  );
+
+  buttonEl.parentElement.remove();
+  // use splice to remove the task from the taskData array as the first argument is the index of the item to remove and the second argument is the number of items to remove
+  taskData.splice(dataArrIndex, 1);
+}
+
+const editTask = (buttonEl) => {
+
+}
 
 // reset the form inputs after adding a task
 const reset = () => {
