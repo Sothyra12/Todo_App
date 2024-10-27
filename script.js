@@ -13,13 +13,17 @@ const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
 
 // store all task data like title, date, description
-const taskData = [];
+const taskData = JSON.parse(localStorage.getItem("data")) || [];
 
 // track the state when editing & discarding tasks
 let currentTask = {};
 
 // add the input values to the taskData array
 const addOrUpdateTask = () => {
+  if (!titleInput.value.trim()) {
+    alert("Please provide a title");
+    return;
+  }
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
   const taskObj = {
     id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
@@ -34,6 +38,8 @@ const addOrUpdateTask = () => {
     taskData[dateArrIndex] = taskObj;
   }
 
+  // set or (store/save) the taskData array in the localStorage when user adds, edits or deletes a task
+  localStorage.setItem("data", JSON.stringify(taskData));
   updateTaskContainer();
   reset();
 };
@@ -67,6 +73,7 @@ const deleteTask = (buttonEl) => {
   buttonEl.parentElement.remove();
   // use splice to remove the task from the taskData array as the first argument is the index of the item to remove and the second argument is the number of items to remove
   taskData.splice(dataArrIndex, 1);
+  localStorage.setItem("data", JSON.stringify(taskData));
 }
 
 const editTask = (buttonEl) => {
@@ -86,12 +93,17 @@ const editTask = (buttonEl) => {
 
 // reset the form inputs after adding a task
 const reset = () => {
+  addOrUpdateTaskBtn.innerText = "Add Task";
   titleInput.value = "";
   dateInput.value = "";
   descriptionInput.value = "";
   taskForm.classList.toggle("hidden");
   currentTask = {};
 };
+
+if (taskData.length) {
+  updateTaskContainer();
+}
 
 // open and close the form modal using classList.toggle instead of classlist.add/.remove
 openTaskFormBtn.addEventListener("click", () =>
