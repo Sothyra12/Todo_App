@@ -35,7 +35,7 @@ const addOrUpdateTask = () => {
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
   } else {
-    taskData[dateArrIndex] = taskObj;
+    taskData[dataArrIndex] = taskObj;
   }
 
   // set or (store/save) the taskData array in the localStorage when user adds, edits or deletes a task
@@ -49,9 +49,8 @@ const updateTaskContainer = () => {
   tasksContainer.innerHTML = "";
 
   // loop through the taskData array and add the tasks to the DOM
-  taskData.forEach(
-    ({ id, title, date, description }) => {
-        tasksContainer.innerHTML += `
+  taskData.forEach(({ id, title, date, description }) => {
+    tasksContainer.innerHTML += `
         <div class="task" id="${id}">
           <p><strong>Title:</strong> ${title}</p>
           <p><strong>Date:</strong> ${date}</p>
@@ -59,9 +58,8 @@ const updateTaskContainer = () => {
           <button onclick="editTask(this)" type="button" class="btn">Edit</button>
           <button onclick="deleteTask(this)" type="button" class="btn">Delete</button>
         </div>
-      `
-    }
-  );
+      `;
+  });
 };
 
 const deleteTask = (buttonEl) => {
@@ -74,11 +72,13 @@ const deleteTask = (buttonEl) => {
   // use splice to remove the task from the taskData array as the first argument is the index of the item to remove and the second argument is the number of items to remove
   taskData.splice(dataArrIndex, 1);
   localStorage.setItem("data", JSON.stringify(taskData));
-}
+};
 
 const editTask = (buttonEl) => {
   // find the index of the task to edit
-  const dataArrIndex = taskData.findIndex((item) => item.id === buttonEl.parentElement.id);
+  const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
+  );
 
   currentTask = taskData[dataArrIndex];
 
@@ -89,7 +89,7 @@ const editTask = (buttonEl) => {
   addOrUpdateTaskBtn.innerText = "Update Task";
 
   taskForm.classList.toggle("hidden");
-}
+};
 
 // reset the form inputs after adding a task
 const reset = () => {
@@ -101,6 +101,7 @@ const reset = () => {
   currentTask = {};
 };
 
+// check if there are tasks in the taskData array and update the tasks container
 if (taskData.length) {
   updateTaskContainer();
 }
@@ -111,8 +112,12 @@ openTaskFormBtn.addEventListener("click", () =>
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
-  const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-  const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || descriptionInput.value !== currentTask.description;
+  const formInputsContainValues =
+    titleInput.value || dateInput.value || descriptionInput.value;
+  const formInputValuesUpdated =
+    titleInput.value !== currentTask.title ||
+    dateInput.value !== currentTask.date ||
+    descriptionInput.value !== currentTask.description;
 
   if (formInputsContainValues && formInputValuesUpdated) {
     confirmCloseDialog.showModal();
